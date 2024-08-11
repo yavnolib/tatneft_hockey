@@ -5,8 +5,8 @@ import torch
 import tritonclient.grpc as grpcclient
 from PIL import Image, ImageFilter
 
-from blur.frontend.config import TRITON_PORT, TRITON_URL
-from blur.processor_utils import Processor
+from tathockey.frontend.config import TRITON_PORT, TRITON_URL
+from tathockey.processor_utils import Processor
 
 
 class MLApi:
