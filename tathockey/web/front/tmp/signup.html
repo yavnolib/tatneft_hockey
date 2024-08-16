@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - MYTEAM</title>
+    <!-- Bootstrap CSS -->
+    <link href="./static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f2f2f2; /* Серый фон */
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: #007a33; /* Зелёный цвет для Navbar */
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: white;
+        }
+        .form-container {
+            background-color: #ffffff; /* Белый цвет для формы */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Эффект объема */
+            border: 1px solid #e0e0e0; /* Тонкая граница */
+            margin-bottom: auto;
+        }
+        .form-control:focus {
+            border-color: #007a33;
+            box-shadow: none;
+        }
+        .btn-primary {
+            background-color: #007a33;
+            border: none;
+            box-shadow: 0px 4px 10px rgba(0, 122, 51, 0.3); /* Эффект объема на кнопке */
+        }
+        .btn-primary:hover {
+            background-color: #005a29;
+        }
+        .toggle-password {
+            cursor: pointer;
+            color: #007a33;
+        }
+        .toggle-password:hover {
+            color: #005a29;
+        }
+        .invalid-feedback {
+            display: block;
+            font-size: 0.875em;
+            margin-top: 5px;
+        }
+        .footer {
+            background-color: #d62727; /* Красный цвет */
+            padding: 10px 0;
+            text-align: center;
+            color: white;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">MYTEAM</a>
+    </div>
+</nav>
+
+<!-- Registration Form -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="form-container">
+                <h3 class="text-center mb-4">Register</h3>
+                <form id="registerForm" novalidate>
+                    <div class="mb-3">
+                        <label for="nickname" class="form-label">Nickname</label>
+                        <input type="text" class="form-control" id="nickname" placeholder="Enter nickname" required>
+                        <div class="invalid-feedback" id="nicknameError"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+                            <span class="input-group-text toggle-password"><i class="bi bi-eye"></i></span>
+                        </div>
+                        <div class="invalid-feedback" id="passwordError"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password" required>
+                            <span class="input-group-text toggle-password"><i class="bi bi-eye"></i></span>
+                        </div>
+                        <div class="invalid-feedback" id="confirmPasswordError">Passwords must match.</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <span>DESCRIPTION</span>
+    </div>
+</footer>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="./static/js/bootstrap.bundle.min.js"></script>
+<!-- Icon library -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<script>
+    // Show/hide password functionality
+    document.querySelectorAll('.toggle-password').forEach(function (element) {
+        element.addEventListener('click', function () {
+            const passwordField = this.previousElementSibling;
+            const passwordFieldType = passwordField.getAttribute('type');
+            if (passwordFieldType === 'password') {
+                passwordField.setAttribute('type', 'text');
+                this.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            } else {
+                passwordField.setAttribute('type', 'password');
+                this.innerHTML = '<i class="bi bi-eye"></i>';
+            }
+        });
+    });
+
+    // Form validation
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        const nickname = document.getElementById('nickname');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const nicknameError = document.getElementById('nicknameError');
+        const passwordError = document.getElementById('passwordError');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        let valid = true;
+
+        // Clear previous errors
+        nicknameError.textContent = '';
+        passwordError.textContent = '';
+        confirmPasswordError.textContent = '';
+
+        // Nickname validation
+        const nicknameRegex = /^[a-zA-Z0-9]{4,}$/;
+        if (!nicknameRegex.test(nickname.value)) {
+            valid = false;
+            if (nickname.value.length < 4) {
+                nicknameError.textContent = 'Nickname must be at least 4 characters long.';
+            } else {
+                nicknameError.textContent = 'Nickname can only contain English letters and numbers.';
+            }
+            nickname.classList.add('is-invalid');
+        } else {
+            nickname.classList.remove('is-invalid');
+        }
+
+        // Password validation
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{9,}$/;
+        if (!passwordRegex.test(password.value)) {
+            valid = false;
+            if (password.value.length < 9) {
+                passwordError.textContent = 'Password must be at least 9 characters long.';
+            } else {
+                passwordError.textContent = 'Password must include uppercase, lowercase, number, and special character.';
+            }
+            password.classList.add('is-invalid');
+        } else {
+            password.classList.remove('is-invalid');
+        }
+
+        // Confirm Password validation
+        if (password.value !== confirmPassword.value) {
+            valid = false;
+            confirmPasswordError.textContent = 'Passwords do not match.';
+            confirmPassword.classList.add('is-invalid');
+        } else {
+            confirmPassword.classList.remove('is-invalid');
+        }
+
+        if (!valid) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        this.classList.add('was-validated');
+    });
+</script>
+</body>
+</html>
