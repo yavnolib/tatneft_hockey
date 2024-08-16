@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  nginx:
+    build:
+      context: ./front
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./uploads_pics:/uploads_pics/
+#    networks:
+#      - app-network
