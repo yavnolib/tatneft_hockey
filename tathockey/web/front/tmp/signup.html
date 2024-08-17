@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - MYTEAM</title>
     <!-- Bootstrap CSS -->
-    <link href="./static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- Custom CSS -->
     <style>
         body {
@@ -16,13 +17,16 @@
             flex-direction: column;
             min-height: 100vh;
         }
+
         .navbar {
             background-color: #007a33; /* Зелёный цвет для Navbar */
         }
+
         .navbar-brand {
             font-weight: bold;
             color: white;
         }
+
         .form-container {
             background-color: #ffffff; /* Белый цвет для формы */
             padding: 30px;
@@ -31,30 +35,37 @@
             border: 1px solid #e0e0e0; /* Тонкая граница */
             margin-bottom: auto;
         }
+
         .form-control:focus {
             border-color: #007a33;
             box-shadow: none;
         }
+
         .btn-primary {
             background-color: #007a33;
             border: none;
             box-shadow: 0px 4px 10px rgba(0, 122, 51, 0.3); /* Эффект объема на кнопке */
         }
+
         .btn-primary:hover {
             background-color: #005a29;
         }
+
         .toggle-password {
             cursor: pointer;
             color: #007a33;
         }
+
         .toggle-password:hover {
             color: #005a29;
         }
+
         .invalid-feedback {
             display: block;
             font-size: 0.875em;
             margin-top: 5px;
         }
+
         .footer {
             background-color: #d62727; /* Красный цвет */
             padding: 10px 0;
@@ -87,7 +98,8 @@
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+                            <input type="password" class="form-control" id="password" placeholder="Enter password"
+                                   required>
                             <span class="input-group-text toggle-password"><i class="bi bi-eye"></i></span>
                         </div>
                         <div class="invalid-feedback" id="passwordError"></div>
@@ -95,7 +107,8 @@
                     <div class="mb-3">
                         <label for="confirmPassword" class="form-label">Confirm Password</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password" required>
+                            <input type="password" class="form-control" id="confirmPassword"
+                                   placeholder="Confirm password" required>
                             <span class="input-group-text toggle-password"><i class="bi bi-eye"></i></span>
                         </div>
                         <div class="invalid-feedback" id="confirmPasswordError">Passwords must match.</div>
@@ -116,7 +129,9 @@
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="./static/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 <!-- Icon library -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 <script>
@@ -136,7 +151,7 @@
     });
 
     // Form validation
-    document.getElementById('registerForm').addEventListener('submit', function(event) {
+    document.getElementById('registerForm').addEventListener('submit', function (event) {
         const nickname = document.getElementById('nickname');
         const password = document.getElementById('password');
         const confirmPassword = document.getElementById('confirmPassword');
