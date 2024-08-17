@@ -4,8 +4,6 @@ WORKDIR /var/www/html/
 
 COPY /nginx/nginx.conf /etc/nginx/nginx.conf
 
-COPY /templates/ /var/www/html/
-COPY /static/ /var/www/html/static/
-
+COPY /tmp/ /var/www/html/
 
 EXPOSE 80

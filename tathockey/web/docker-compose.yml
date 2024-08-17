@@ -7,7 +7,7 @@ services:
     container_name: nginx
     ports:
       - "80:80"
-    volumes:
-      - ./uploads_pics:/uploads_pics/
+#    volumes:
+#      - ./upload:/upload/
 #    networks:
 #      - app-network
