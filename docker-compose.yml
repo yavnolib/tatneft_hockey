@@ -1,6 +1,12 @@
 version: "3"
 
 services:
+  nginx:
+    build:
+      context: ./tathockey/web/front
+    container_name: nginx
+    ports:
+      - "80:80"
   blur-frontend:
     build:
       context: .
