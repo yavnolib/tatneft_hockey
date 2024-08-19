@@ -19,6 +19,7 @@ create table if not exists users
 create table if not exists video
 (
     id          serial primary key,
+    creator_id int not null references users(id),
     name        text,
     hash        varchar(256) unique not null,
     created_at  TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP,

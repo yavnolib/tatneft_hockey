@@ -26,6 +26,19 @@ services:
 #      - ./upload:/upload/
 #    networks:
 #      - app-network
+#  go-back:
+#    build: ./back
+#    ports:
+#      - "8000:8000"
+#    environment:
+#      - DB_HOST=postgres
+#      - DB_PORT=5432
+#      - DB_USER=youruser
+#      - DB_PASSWORD=yourpassword
+#      - DB_NAME=yourdb
+#      - JWT_SECRET=your-secret-key
+#    depends_on:
+#      - postgres
 
 
 volumes:

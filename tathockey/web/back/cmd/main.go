@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/joho/godotenv"
-	"os"
 	"tat_hockey_pack/internal/configs/logger"
 	"tat_hockey_pack/internal/configs/postgre"
+	"tat_hockey_pack/internal/repository"
 )
 
 func main() {
@@ -23,22 +23,16 @@ func main() {
 		panic(err)
 	}
 	_ = l
-	//err = postgre.TestPing(l)
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
+	err = postgre.TestPing(l)
+	if err != nil {
+		fmt.Println(err)
+	}
 	postgre.RemoveTables(l)
 	log := logger.InitLogger()
 
-	// Пример логирования
-	log.Debug("Debug message", "env", os.Getenv("APP_ENV"))
-	log.Info("Application started", "env", os.Getenv("APP_ENV"))
-	log.Error("An error occurred", "error", "some error details")
-
+	rep := repository.NewVideoRepository(l, log)
+	_ = rep
 	fmt.Println("Starting server...")
-	// TODO: конфиг бд
-
-	// TODO: загрузка конфига логгер
 
 	// TODO middlewares:
 	// 1. Request ID

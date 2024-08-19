@@ -51,6 +51,7 @@ func loadPostgresConfig() (*postgresConfig, error) {
 		log.Printf("[ERROR] %+v\n", cfg)
 		return nil, errors.New("EMPTY config")
 	}
+	log.Printf("[INFO] setup DB config: \n")
 
 	return cfg, nil
 }
@@ -71,7 +72,10 @@ func LoadPgxPool() (*pgxpool.Pool, error) {
 		log.Printf("[ERROR] %+v\n", err)
 		return nil, err
 	}
-
+	if err = TestPing(pool); err != nil {
+		return nil, err
+	}
+	log.Printf("[INFO] setuo pg pool config \n")
 	return pool, nil
 }
 

@@ -111,13 +111,12 @@ func setupPrettySlog() *slog.Logger {
 	return slog.New(handler)
 }
 
-// CustomJSONHandler кастомный обработчик для цветного JSON логирования в dev режиме
 type CustomJSONHandler struct {
 	writer *os.File
 	level  slog.Level
 }
 
-func (h *CustomJSONHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
+func (h *CustomJSONHandler) WithAttrs(_ []slog.Attr) slog.Handler {
 	return h
 }
 
@@ -135,7 +134,7 @@ func (h *CustomJSONHandler) Enabled(_ context.Context, level slog.Level) bool {
 func (h *CustomJSONHandler) Handle(_ context.Context, r slog.Record) error {
 	data := map[string]interface{}{
 		"time":    r.Time.Format(time.RFC3339),
-		"level":   r.Level.String(), // сохраняем уровень без цвета
+		"level":   r.Level.String(),
 		"message": r.Message,
 	}
 
@@ -155,7 +154,7 @@ func (h *CustomJSONHandler) Handle(_ context.Context, r slog.Record) error {
 	return nil
 }
 
-// InitLogger инициализирует логгер для разных режимов (dev/prod)
+// InitLogger инициализирует логгер для разных режимов (dev/prod/local)
 func InitLogger() *slog.Logger {
 	var handler slog.Handler
 	var logger *slog.Logger
@@ -164,20 +163,18 @@ func InitLogger() *slog.Logger {
 	case "local":
 		logger = setupPrettySlog()
 	case "prod":
-		// Логирование в файл с ротацией в формате JSON
 		logFile := &lumberjack.Logger{
 			Filename:   "app.log",
 			MaxSize:    10,   // MB
 			MaxBackups: 3,    // Сколько старых файлов хранить
-			MaxAge:     28,   // Сколько дней хранить файлы
+			MaxAge:     3,    // Сколько дней хранить файлы
 			Compress:   true, // Сжимать старые файлы
 		}
 		handler = slog.NewJSONHandler(logFile, &slog.HandlerOptions{
-			Level: slog.LevelInfo, // Уровень логирования для production
+			Level: slog.LevelInfo,
 		})
 		logger = slog.New(handler)
 	case "dev":
-		// Используем кастомный обработчик для цветного JSON логирования
 		handler = &CustomJSONHandler{writer: os.Stdout, level: slog.LevelDebug}
 		logger = slog.New(handler)
 	default:
