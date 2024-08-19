@@ -78,6 +78,7 @@ func LoadPgxPool() (*pgxpool.Pool, error) {
 func TestPing(pool *pgxpool.Pool) error {
 	ctx := context.Background()
 	if err := pool.Ping(ctx); err != nil {
+		log.Println("[ERROR] ping not ok")
 		return err
 	}
 	log.Println("[INFO] ping ok")

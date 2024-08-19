@@ -32,5 +32,4 @@ func RemoveTables(db *pgxpool.Pool) {
 	if err := rows.Err(); err != nil {
 		log.Fatalf("Error iterating through tables: %v\n", err)
 	}
-
 }
