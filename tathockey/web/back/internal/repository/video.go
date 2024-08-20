@@ -13,7 +13,7 @@ type VideoRepository struct {
 }
 
 const (
-	save      = "insert into video (creator_id, name, hash, created_at, description) values ($1, $2, $3, $4, $5) returning id;"
+	saveVideo = "insert into video (creator_id, name, hash, created_at, description) values ($1, $2, $3, $4, $5) returning id;"
 	getByHash = `select id, creator_id, name, hash, created_at, description from video where hash = $1`
 	getByID   = `select id, creator_id, name, hash, created_at, description from video where id = $1`
 	getByName = `select id, creator_id, name, hash, created_at, description from video where name = $1`
@@ -26,10 +26,10 @@ func NewVideoRepository(db *pgxpool.Pool, logger *slog.Logger) *VideoRepository 
 	}
 }
 
-func (v *VideoRepository) Save(ctx context.Context, vi *models.Video) (uint64, error) {
+func (v *VideoRepository) Save(vi *models.Video) (uint64, error) {
 	v.log.Debug("VideoRepository.Save", "--", "run")
 	var id uint64
-	err := v.db.QueryRow(ctx, save,
+	err := v.db.QueryRow(context.Background(), saveVideo,
 		vi.CreatorID, vi.Name, vi.Hash, vi.CreatedAt, vi.Description).
 		Scan(&id)
 	if err != nil {
