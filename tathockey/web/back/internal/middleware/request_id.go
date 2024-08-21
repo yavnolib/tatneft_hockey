@@ -12,11 +12,8 @@ func RequestIDMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		requestID := r.Header.Get("X-Request-ID")
 		if requestID == "" {
-			// https://github.com/opentracing/specification/blob/master/rfc/trace_identifiers.md
 			requestID = uuid.New().String()
 			r.Header.Set("X-Request-ID", requestID)
-			r.Header.Set("trace-id", requestID)
-			w.Header().Set("trace-id", requestID)
 			w.Header().Set("X-Request-ID", requestID)
 		}
 		ctx := context.WithValue(r.Context(), requestIDKey, requestID)
