@@ -5,3 +5,7 @@ type User struct {
 	Nickname string `json:"nickname" db:"nickname"`
 	Password []byte `json:"password" db:"password"`
 }
+
+func (u *User) GetID() uint64 {
+	return u.ID
+}
