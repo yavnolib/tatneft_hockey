@@ -57,6 +57,7 @@ func (s *Service) Create(ctx context.Context, u interfaces.User) (string, error)
 	return session.ID, nil
 }
 
+// DestroyCurrent для logout
 func (s *Service) DestroyCurrent(ctx context.Context) error {
 	session, err := FromContext(ctx)
 	if err != nil {
@@ -77,6 +78,7 @@ func (s *Service) DestroyCurrent(ctx context.Context) error {
 	return nil
 }
 
+// DestroyAll в случае смены пароля
 func (s *Service) DestroyAll(ctx context.Context, user interfaces.User) error {
 	s.log.Debug("service.session.DestroyAll", "user", user)
 	err := s.repo.DestroyAll(ctx, user.GetID())

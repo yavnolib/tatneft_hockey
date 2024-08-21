@@ -63,7 +63,7 @@ func (s *Session) Destroy(ctx context.Context, sessionID string) error {
 	return nil
 }
 
-func (s *Session) DestroyAll(ctx context.Context, userID uint64) error {
+func (s *Session) DestroyAll(ctx context.Context, userID int64) error {
 	_, err := s.db.Exec(ctx, destroyAll, userID)
 	if err != nil {
 		return err
