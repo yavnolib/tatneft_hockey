@@ -7,3 +7,11 @@ type Session struct {
 	UserID    uint64    `json:"user_id" db:"user_id"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 }
+
+func (session *Session) GetSessionID() string {
+	return session.ID
+}
+
+func (session *Session) GetUserID() uint64 {
+	return session.UserID
+}
