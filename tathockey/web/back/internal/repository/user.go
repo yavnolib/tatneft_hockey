@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"log/slog"
@@ -77,12 +78,14 @@ func (u *User) GetByEmail(email string) (*models.User, error) {
 func (u *User) CheckUser(email, nickname string) (uint64, error) {
 	var id uint64
 	err := u.db.QueryRow(context.Background(), checkUserByEmailOrNick, email, nickname).Scan(&id)
-
+	if errors.Is(err, pgx.ErrNoRows) {
+		return 0, nil
+	}
 	if err != nil {
-		u.log.Error("User.GetByEmail", "err", err.Error())
+		u.log.Error("User.CheckUser", "err", err.Error())
 		return 0, err
 	}
-	u.log.Debug("User.GetByEmail", "user", id)
+	u.log.Debug("User.CheckUser", "user", id)
 
 	return id, nil
 }
