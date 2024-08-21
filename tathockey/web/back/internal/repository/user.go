@@ -15,9 +15,9 @@ type User struct {
 }
 
 const (
-	saveUser      = "insert into users (id, nickname, password) values ($1, $2, $3) returning id;"
-	getUserByID   = `select id, nickname, password from users where id = $1;`
-	getByNickname = `select id, nickname, password from users where nickname = $1;`
+	saveUser      = "insert into users (id, email, nickname, password) values ($1, $2, $3, $4) returning id;"
+	getUserByID   = `select id, nickname, email, password from users where id = $1;`
+	getByNickname = `select id, nickname,email, password from users where nickname = $1;`
 )
 
 func NewUserRepository(db *pgxpool.Pool, log *slog.Logger) *User {
@@ -29,7 +29,7 @@ func NewUserRepository(db *pgxpool.Pool, log *slog.Logger) *User {
 
 func (u *User) Save(user *models.User) (uint64, error) {
 	var id uint64
-	err := u.db.QueryRow(context.Background(), saveUser, user.ID, user.Nickname, user.Password).
+	err := u.db.QueryRow(context.Background(), saveUser, user.ID, user.Nickname, user.Email, user.Password).
 		Scan(&id)
 	if err != nil {
 		return 0, err
@@ -41,7 +41,7 @@ func (u *User) Save(user *models.User) (uint64, error) {
 func (u *User) GetByNickname(username string) (*models.User, error) {
 	var user models.User
 	err := u.db.QueryRow(context.Background(), getByNickname, username).
-		Scan(&user.ID, &user.Nickname, &user.Password)
+		Scan(&user.ID, &user.Nickname, &user.Email, &user.Password)
 
 	if err != nil {
 		u.log.Error("User.GetByNickname", "err", err.Error())
@@ -53,7 +53,8 @@ func (u *User) GetByNickname(username string) (*models.User, error) {
 
 func (u *User) GetByID(id int64) (*models.User, error) {
 	var user models.User
-	err := u.db.QueryRow(context.Background(), getUserByID, id).Scan(&user.ID, &user.Nickname, &user.Password)
+	err := u.db.QueryRow(context.Background(), getUserByID, id).
+		Scan(&user.ID, &user.Nickname, &user.Email, &user.Password)
 	if err != nil {
 		u.log.Error("User.GetByID", "err", err.Error())
 		return nil, err

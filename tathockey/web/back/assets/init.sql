@@ -12,6 +12,7 @@ CREATE INDEX idx_sessions_session_id ON sessions (id);
 create table if not exists users
 (
     id       serial primary key,
+    email varchar(129) unique,
     nickname varchar(128) unique,
     password bytea NOT NULL
 );
