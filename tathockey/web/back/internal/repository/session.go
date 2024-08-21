@@ -45,12 +45,13 @@ func (s *Session) GetBySessionID(ctx context.Context, id string) (*models.Sessio
 }
 
 func (s *Session) Create(ctx context.Context, session *models.Session) error {
-	_, err := s.db.Exec(ctx, createSessionQuery, session.ID, session.UserID)
+	var id string
+	err := s.db.QueryRow(ctx, createSessionQuery, session.ID, session.UserID).Scan(&id)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	return err
 }
 
 func (s *Session) Destroy(ctx context.Context, sessionID string) error {
