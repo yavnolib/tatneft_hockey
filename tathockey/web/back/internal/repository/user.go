@@ -7,7 +7,9 @@ import (
 	"tat_hockey_pack/internal/models"
 )
 
-type UserRepository struct {
+//Todo убрать логгер
+
+type User struct {
 	db  *pgxpool.Pool
 	log *slog.Logger
 }
@@ -18,14 +20,14 @@ const (
 	getByNickname = `select id, nickname, password from users where nickname = $1;`
 )
 
-func NewUserRepository(db *pgxpool.Pool, log *slog.Logger) *UserRepository {
-	return &UserRepository{
+func NewUserRepository(db *pgxpool.Pool, log *slog.Logger) *User {
+	return &User{
 		db:  db,
 		log: log,
 	}
 }
 
-func (u *UserRepository) Save(user *models.User) (uint64, error) {
+func (u *User) Save(user *models.User) (uint64, error) {
 	var id uint64
 	err := u.db.QueryRow(context.Background(), saveUser, user.ID, user.Nickname, user.Password).
 		Scan(&id)
@@ -36,26 +38,26 @@ func (u *UserRepository) Save(user *models.User) (uint64, error) {
 	return id, nil
 }
 
-func (u *UserRepository) GetByNickname(username string) (*models.User, error) {
+func (u *User) GetByNickname(username string) (*models.User, error) {
 	var user models.User
 	err := u.db.QueryRow(context.Background(), getByNickname, username).
 		Scan(&user.ID, &user.Nickname, &user.Password)
 
 	if err != nil {
-		u.log.Error("UserRepository.GetByNickname", "err", err.Error())
+		u.log.Error("User.GetByNickname", "err", err.Error())
 		return nil, err
 	}
-	u.log.Debug("UserRepository.GetByNickname", "user", user)
+	u.log.Debug("User.GetByNickname", "user", user)
 	return &user, nil
 }
 
-func (u *UserRepository) GetByID(id int64) (*models.User, error) {
+func (u *User) GetByID(id int64) (*models.User, error) {
 	var user models.User
 	err := u.db.QueryRow(context.Background(), getUserByID, id).Scan(&user.ID, &user.Nickname, &user.Password)
 	if err != nil {
-		u.log.Error("UserRepository.GetByID", "err", err.Error())
+		u.log.Error("User.GetByID", "err", err.Error())
 		return nil, err
 	}
-	u.log.Debug("UserRepository.GetByID", "user", user)
+	u.log.Debug("User.GetByID", "user", user)
 	return &user, nil
 }
