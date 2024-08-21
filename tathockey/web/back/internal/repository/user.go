@@ -17,12 +17,14 @@ type User struct {
 }
 
 const (
-	saveUser      = "insert into users (id, email, nickname, password) values ($1, $2, $3, $4) returning id;"
-	getUserByID   = `select id, nickname, email, password from users where id = $1;`
-	getByNickname = `select id, nickname,email, password from users where nickname = $1;`
-	getByEmail    = `select id, nickname,email from users where email = $1;`
-
+	saveUser               = "insert into users (id, email, nickname, password) values ($1, $2, $3, $4) returning id;"
+	getUserByID            = `select id, nickname, email from users where id = $1;`
+	getByNickname          = `select id, nickname,email from users where nickname = $1;`
+	getByEmail             = `select id, nickname,email from users where email = $1;`
+	updatePass             = `update users set password = $1 where email = $2;`
 	checkUserByEmailOrNick = `select id from users where email = $1 or nickname = $2;`
+
+	check = `select id, nickname, password from users where email = $1`
 )
 
 func NewUserRepository(db *pgxpool.Pool, log *slog.Logger) *User {
@@ -32,21 +34,22 @@ func NewUserRepository(db *pgxpool.Pool, log *slog.Logger) *User {
 	}
 }
 
+// rowToUser - читаем все данные кроме пароля
 func rowToUser(row pgx.Row) (*models.User, error) {
 	u := &models.User{}
-	err := row.Scan(&u.ID, &u.Nickname, &u.Email, &u.Password)
+	err := row.Scan(&u.ID, &u.Nickname, &u.Email)
 	if err != nil {
 		return nil, err
 	}
 	return u, nil
 }
 
-func (u *User) Save(user *models.User) (uint64, error) {
-	var id uint64
+func (u *User) Save(user *models.User) (int64, error) {
+	var id int64
 	err := u.db.QueryRow(context.Background(), saveUser, user.ID, user.Nickname, user.Email, user.Password).
 		Scan(&id)
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
 
 	return id, nil
@@ -75,15 +78,15 @@ func (u *User) GetByEmail(email string) (*models.User, error) {
 	return user, nil
 }
 
-func (u *User) CheckUser(email, nickname string) (uint64, error) {
-	var id uint64
+func (u *User) CheckUser(email, nickname string) (int64, error) {
+	var id int64
 	err := u.db.QueryRow(context.Background(), checkUserByEmailOrNick, email, nickname).Scan(&id)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return 0, nil
+		return -1, nil
 	}
 	if err != nil {
 		u.log.Error("User.CheckUser", "err", err.Error())
-		return 0, err
+		return -1, err
 	}
 	u.log.Debug("User.CheckUser", "user", id)
 
@@ -101,4 +104,26 @@ func (u *User) GetByID(id int64) (*models.User, error) {
 	}
 	u.log.Debug("User.GetByID", "user", user)
 	return user, nil
+}
+
+func (u *User) UpdatePassword(email string, password []byte) error {
+	_, err := u.db.Exec(context.Background(), updatePass, password, email)
+	if err != nil {
+		u.log.Error("User.UpdatePassword", "err", err.Error())
+		return err
+	}
+
+	return nil
+}
+
+func (u *User) CheckPass(email string) (*models.User, error) {
+	m := models.User{
+		Email: email,
+	}
+	err := u.db.QueryRow(context.Background(), check, email).Scan(&m.ID, &m.Nickname, &m.Password)
+
+	if err != nil {
+		return nil, err
+	}
+	return &m, nil
 }
