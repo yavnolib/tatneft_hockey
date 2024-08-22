@@ -21,11 +21,3 @@ func RequestIDMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
-
-func RequestIDFromContext(ctx context.Context) string {
-	requestID, ok := ctx.Value(requestIDKey).(string)
-	if !ok {
-		return "-"
-	}
-	return requestID
-}
