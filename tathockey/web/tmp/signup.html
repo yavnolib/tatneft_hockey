@@ -72,6 +72,11 @@
                         <div class="invalid-feedback" id="nicknameError"></div>
                     </div>
                     <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+                        <div class="invalid-feedback" id="emailError"></div>
+                    </div>
+                    <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
                         <div class="input-group">
                             <input type="password" class="form-control" id="password" placeholder="Enter password"
@@ -95,12 +100,11 @@
         </div>
     </div>
 </div>
-<!-- Bootstrap JS and dependencies -->
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-<!-- Icon library -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 <script>
     // Show/hide password functionality
@@ -121,15 +125,18 @@
     // Form validation
     document.getElementById('registerForm').addEventListener('submit', function (event) {
         const nickname = document.getElementById('nickname');
+        const email = document.getElementById('email');
         const password = document.getElementById('password');
         const confirmPassword = document.getElementById('confirmPassword');
         const nicknameError = document.getElementById('nicknameError');
+        const emailError = document.getElementById('emailError');
         const passwordError = document.getElementById('passwordError');
         const confirmPasswordError = document.getElementById('confirmPasswordError');
         let valid = true;
 
         // Clear previous errors
         nicknameError.textContent = '';
+        emailError.textContent = '';
         passwordError.textContent = '';
         confirmPasswordError.textContent = '';
 
@@ -147,8 +154,18 @@
             nickname.classList.remove('is-invalid');
         }
 
+        // Email validation
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(email.value)) {
+            valid = false;
+            emailError.textContent = 'Invalid email address.';
+            email.classList.add('is-invalid');
+        } else {
+            email.classList.remove('is-invalid');
+        }
+
         // Password validation
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{9,}$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%*?&#])[A-Za-z\d@$%*?&#]{9,}$/;
         if (!passwordRegex.test(password.value)) {
             valid = false;
             if (password.value.length < 9) {
@@ -176,6 +193,25 @@
         }
 
         this.classList.add('was-validated');
+        fetch('/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(registerData),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === 200) {
+                    alert('Register succeeded');
+                    // Redirect to login page or perform other actions
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     });
 </script>
 </body>
