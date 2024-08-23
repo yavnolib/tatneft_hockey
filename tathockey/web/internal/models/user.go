@@ -13,3 +13,7 @@ type User struct {
 func (u *User) GetID() int64 {
 	return u.ID
 }
+
+func (u *User) IsAuthenticated() bool {
+	return u.Nickname == ""
+}

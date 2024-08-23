@@ -7,6 +7,7 @@ import (
 
 type User interface {
 	GetID() int64
+	IsAuthenticated() bool
 }
 
 type UserRepository interface {

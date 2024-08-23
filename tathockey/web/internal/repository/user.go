@@ -17,7 +17,7 @@ type User struct {
 }
 
 const (
-	saveUser               = "insert into users (id, email, nickname, password) values ($1, $2, $3, $4) returning id;"
+	saveUser               = "insert into users (email, nickname, password) values ($1, $2, $3) returning id;"
 	getUserByID            = `select id, nickname, email from users where id = $1;`
 	getByNickname          = `select id, nickname,email from users where nickname = $1;`
 	getByEmail             = `select id, nickname,email from users where email = $1;`
@@ -46,7 +46,7 @@ func rowToUser(row pgx.Row) (*models.User, error) {
 
 func (u *User) Save(user *models.User) (int64, error) {
 	var id int64
-	err := u.db.QueryRow(context.Background(), saveUser, user.ID, user.Nickname, user.Email, user.Password).
+	err := u.db.QueryRow(context.Background(), saveUser, user.Email, user.Nickname, user.Password).
 		Scan(&id)
 	if err != nil {
 		return -1, err

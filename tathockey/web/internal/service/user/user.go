@@ -45,7 +45,8 @@ func (s *Service) Register(email, nickname, password string) (int64, error) {
 	}
 	if id != -1 {
 		s.log.Debug("User already exists", "id", id)
-		return -1, repo_errors.ErrUserExists
+		s.log.Error("User already exists", "email", email)
+		return -2, repo_errors.ErrUserExists
 	}
 	user := &models.User{
 		Nickname: nickname,
@@ -56,7 +57,7 @@ func (s *Service) Register(email, nickname, password string) (int64, error) {
 	id, err = s.repo.Save(user)
 	if err != nil {
 		s.log.Error("Failed to create user", "error", err)
-		return -1, err
+		return -3, err
 	}
 
 	return id, nil
