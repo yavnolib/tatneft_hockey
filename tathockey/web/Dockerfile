@@ -14,7 +14,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 # Копируем остальные файлы проекта
-COPY . .
+COPY back .
 
 # Сборка бинарного файла
 RUN go build -o /auth_service cmd/main.go

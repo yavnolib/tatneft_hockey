@@ -6,7 +6,7 @@ services:
     ports:
       - "54320:5432"
     env_file:
-      - back/.env
+      - .env
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -16,12 +16,12 @@ services:
     restart: unless-stopped
 #    networks:
 #      - app-network
-  nginx:
-    build:
-      context: ./front
-    container_name: nginx
-    ports:
-      - "80:80"
+#  nginx:
+#    build:
+#      context: ./front
+#    container_name: nginx
+#    ports:
+#      - "80:80"
 #    volumes:
 #      - ./upload:/upload/
 #    networks:
