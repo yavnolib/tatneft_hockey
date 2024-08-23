@@ -9,7 +9,7 @@ import (
 	"tat_hockey_pack/internal/service/session"
 )
 
-var noAuth = map[string]struct{}{
+var NoAuth = map[string]struct{}{
 	"/login":  {},
 	"/signup": {},
 	"/feeds":  {},
@@ -19,7 +19,7 @@ var noAuth = map[string]struct{}{
 
 func Auth(sm interfaces.SessionManager, log *slog.Logger, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, ok := noAuth[r.URL.Path]
+		_, ok := NoAuth[r.URL.Path]
 		log.Info("AuthMiddleware", "auth route", ok)
 		if ok || strings.Contains(r.URL.Path, "static") {
 			next.ServeHTTP(w, r)
