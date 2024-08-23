@@ -19,11 +19,11 @@ var (
 )
 
 type Service struct {
-	repo repository.Session
+	repo *repository.Session
 	log  *slog.Logger
 }
 
-func NewService(sessionRepo repository.Session, log *slog.Logger) *Service {
+func NewService(log *slog.Logger, sessionRepo *repository.Session) *Service {
 	return &Service{
 		repo: sessionRepo,
 		log:  log,

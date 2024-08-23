@@ -18,9 +18,9 @@ const cookieName = "session_id"
 
 var ErrNoAuth = errors.New("No session found")
 
-func NewSessionManager(sessions *interfaces.SessionService, log *slog.Logger) *SessionManager {
+func NewSessionManager(sessions interfaces.SessionService, log *slog.Logger) *SessionManager {
 	return &SessionManager{
-		sessions: *sessions,
+		sessions: sessions,
 		log:      log,
 	}
 }

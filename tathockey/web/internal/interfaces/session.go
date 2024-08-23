@@ -2,6 +2,7 @@ package interfaces
 
 import (
 	"context"
+	"net/http"
 	"tat_hockey_pack/internal/models"
 )
 
@@ -25,4 +26,5 @@ type SessionService interface {
 }
 
 type SessionManager interface {
+	Check(r *http.Request) (*models.Session, error)
 }
