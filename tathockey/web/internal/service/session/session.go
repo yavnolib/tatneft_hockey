@@ -33,7 +33,7 @@ func NewService(log *slog.Logger, sessionRepo *repository.Session) *Service {
 func (s *Service) Check(ctx context.Context, sessionFromCookie string) (*models.Session, error) {
 	ses, err := s.repo.GetBySessionID(ctx, sessionFromCookie)
 	if err != nil {
-		s.log.Debug("repo.GetBySessionID", "error", err)
+		s.log.Debug("repo.GetBySessionID", "error", err.Error())
 		return nil, err
 	}
 	if ses.CreatedAt.Add(delay).Before(time.Now()) {

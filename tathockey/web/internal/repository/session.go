@@ -28,7 +28,7 @@ const (
 	createSessionQuery = `insert into sessions (id, user_id) values ($1, $2) returning id`
 	destroyBySessionID = `delete from sessions where id = $1`
 	destroyAll         = `delete from sessions where user_id = $1`
-	getBySessionID     = `select * from sessions where id = $1`
+	getBySessionID     = `select id, user_id, created_at from sessions where id = $1`
 )
 
 func (s *Session) GetBySessionID(ctx context.Context, id string) (*models.Session, error) {
@@ -39,6 +39,7 @@ func (s *Session) GetBySessionID(ctx context.Context, id string) (*models.Sessio
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, repo_errors.ErrNoSession
 		}
+
 		return nil, err
 	}
 	return &session, nil

@@ -27,4 +27,5 @@ type SessionService interface {
 
 type SessionManager interface {
 	Check(r *http.Request) (*models.Session, error)
+	Create(w http.ResponseWriter, r *http.Request, u User) error
 }
