@@ -12,7 +12,7 @@ var (
 	ErrNoAuth   = errors.New("no session found")
 )
 
-const sessionKey int = 1
+const Key int = 1
 
 func RandStringRunes(n int) string {
 	b := make([]rune, n)
@@ -23,7 +23,7 @@ func RandStringRunes(n int) string {
 }
 
 func FromContext(ctx context.Context) (*models.Session, error) {
-	sess, ok := ctx.Value(sessionKey).(*models.Session)
+	sess, ok := ctx.Value(Key).(*models.Session)
 	if !ok {
 		return nil, ErrNoAuth
 	}
