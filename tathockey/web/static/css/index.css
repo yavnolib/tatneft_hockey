@@ -99,4 +99,19 @@ body {
     background-size: cover;
 }
 
+.profound, .pick {
+    /*font-family: 'Arial Black', Gadget, sans-serif;*/
+    font-weight: 900;
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.profound {
+    color: green;
+}
+
+.pick {
+    color: red;
+}
 
