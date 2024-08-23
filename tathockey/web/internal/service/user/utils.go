@@ -1,13 +1,15 @@
 package user
 
 import (
-	"bytes"
 	"crypto/rand"
 	"errors"
+	"fmt"
 	"golang.org/x/crypto/scrypt"
 )
 
 func (s *Service) passwordIsValid(inputPass, dbPass []byte) bool {
+	fmt.Printf("inputPass: %s\n", string(inputPass))
+	fmt.Printf("dbPass: %s\n", string(dbPass))
 	salt, err := s.getSalt(dbPass)
 	if err != nil {
 		return false
@@ -21,8 +23,10 @@ func (s *Service) passwordIsValid(inputPass, dbPass []byte) bool {
 		"inputHash", inputHash,
 		"salt", salt,
 		"dbPass", dbPass,
-		"ans", bytes.Equal(inputHash, dbPass))
-	return bytes.Equal(inputHash, dbPass)
+		"ans", string(inputHash) == string(dbPass),
+	)
+
+	return string(inputHash) == string(dbPass)
 }
 
 func (s *Service) hashPassword(password, salt []byte) ([]byte, error) {
@@ -44,7 +48,7 @@ func (s *Service) getSalt(hashPass []byte) ([]byte, error) {
 		return nil, invalidPass
 	}
 
-	salt := hashPass[0:8]
+	salt := hashPass[:8]
 	return salt, nil
 }
 
