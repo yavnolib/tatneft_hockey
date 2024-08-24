@@ -32,12 +32,15 @@ func NewService(log *slog.Logger, sessionRepo *repository.Session) *Service {
 
 func (s *Service) Check(ctx context.Context, sessionFromCookie string) (*models.Session, error) {
 	ses, err := s.repo.GetBySessionID(ctx, sessionFromCookie)
+
 	if err != nil {
-		s.log.Debug("repo.GetBySessionID", "error", err.Error())
+		s.log.Error("Session Service", "error", err.Error(),
+			"error", err.Error(),
+			"ses", ses)
 		return nil, err
 	}
 	if ses.CreatedAt.Add(delay).Before(time.Now()) {
-		s.log.Debug("repo.GetBySessionID", "error", err)
+		s.log.Error("ses.CreatedAt.Add(delay).Before(time.Now())", "error", err)
 		return nil, invalidSessionErr
 	}
 
@@ -45,6 +48,7 @@ func (s *Service) Check(ctx context.Context, sessionFromCookie string) (*models.
 }
 
 func (s *Service) Create(ctx context.Context, u interfaces.User) (string, error) {
+	s.log.Debug("SessionService.Create", "start", time.Now())
 	session := models.Session{
 		ID:     RandStringRunes(16),
 		UserID: u.GetID(),

@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"tat_hockey_pack/internal/models"
 	"tat_hockey_pack/internal/repository/repo_errors"
+	"time"
 )
 
 //Todo убрать логгер
@@ -46,13 +47,16 @@ func (s *Session) GetBySessionID(ctx context.Context, id string) (*models.Sessio
 }
 
 func (s *Session) Create(ctx context.Context, session *models.Session) error {
-	var id string
-	err := s.db.QueryRow(ctx, createSessionQuery, session.ID, session.UserID).Scan(&id)
+	s.log.Info("SessionRepo.Create",
+		"start", time.Now(),
+		"user_id", session.UserID,
+		"session_id", session.ID)
+	err := s.db.QueryRow(ctx, createSessionQuery, session.ID, session.UserID).Scan(&session.ID)
 	if err != nil {
+		s.log.Error("Failed to create session", "error", err.Error())
 		return err
 	}
-
-	return err
+	return nil
 }
 
 func (s *Session) Destroy(ctx context.Context, sessionID string) error {
