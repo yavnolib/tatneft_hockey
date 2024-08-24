@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"net/http"
 	"strings"
-	"tat_hockey_pack/internal/handlers"
+	http2 "tat_hockey_pack/internal/handlers/http"
 	"tat_hockey_pack/internal/interfaces"
 	"tat_hockey_pack/internal/service/session"
 )
@@ -35,9 +35,14 @@ func Auth(sm interfaces.SessionManager, log *slog.Logger, next http.Handler) htt
 		}
 
 		// Получаем куку
-		cookie, err := r.Cookie(handlers.CookieName)
+		cookie, err := r.Cookie(http2.CookieName)
+		if cookie == nil {
+			http.Redirect(w, r, "/login", http.StatusUnauthorized)
+			return
+		}
 		if err != nil {
 			log.Error("AuthMiddleware", "cookie error", err.Error())
+
 			http.Redirect(w, r, "/login", http.StatusUnauthorized)
 			return
 		}
