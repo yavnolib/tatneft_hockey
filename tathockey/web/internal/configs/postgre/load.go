@@ -23,12 +23,12 @@ type postgresConfig struct {
 }
 
 func (cfg *postgresConfig) toConnectionString() string {
-	return fmt.Sprintf("%s://%s:%s@%s:%s/%s?sslmode=disable&connect_timeout=%d",
+	return fmt.Sprintf("%s://%s:%s@web-pgdb-1/%s?sslmode=disable&connect_timeout=%d",
 		"postgres",
 		url.QueryEscape(cfg.User),
 		url.QueryEscape(cfg.Password),
-		cfg.Host,
-		cfg.Port,
+		//cfg.Host,
+		//cfg.Port,
 		cfg.DBName,
 		cfg.Timeout,
 	)
