@@ -19,17 +19,17 @@ create table if not exists users
 
 CREATE TABLE videos
 (
-    id   serial primary key ,
+    id   serial primary key,
     name TEXT NOT NULL
 );
 
 CREATE TABLE posts
 (
-    id          serial primary key ,
+    id         serial primary key,
     title      TEXT        NOT NULL,
     preview    TEXT        NOT NULL,
     video_id   INTEGER REFERENCES videos (id),
-    creator_id INTEGER REFERENCES users(id),
+    creator_id INTEGER REFERENCES users (id),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -37,7 +37,6 @@ CREATE TABLE gifs
 (
     id         serial primary key,
     path       TEXT    NOT NULL,
-    video_id   TEXT    NOT NULL,
     class_name INTEGER NOT NULL,
     post_id    INTEGER REFERENCES posts (id)
 );
