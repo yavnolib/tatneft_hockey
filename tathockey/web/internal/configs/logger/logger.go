@@ -102,7 +102,8 @@ func (h *PrettyHandler) WithGroup(name string) slog.Handler {
 func setupPrettySlog() *slog.Logger {
 	opts := PrettyHandlerOptions{
 		SlogOpts: &slog.HandlerOptions{
-			Level: slog.LevelDebug,
+			AddSource: true,
+			Level:     slog.LevelDebug,
 		},
 	}
 

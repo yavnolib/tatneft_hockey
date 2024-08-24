@@ -8,8 +8,14 @@ import (
 	"time"
 )
 
-func requestIDFromContext(ctx context.Context) string {
-	requestID, ok := ctx.Value(requestIDKey).(string)
+type ContextKey string
+
+const (
+	RequestIDKey contextKey = "requestID"
+)
+
+func RequestIDFromContext(ctx context.Context) string {
+	requestID, ok := ctx.Value(RequestIDKey).(string)
 	if !ok {
 		return "-"
 	}
@@ -20,11 +26,16 @@ func LoggerMiddleware(log *slog.Logger, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 
-		requestID := requestIDFromContext(r.Context())
+		// Generate new request ID if not present
+		requestID := RequestIDFromContext(r.Context())
 		if requestID == "" {
 			requestID = uuid.New().String()
 		}
 
+		// Create new context with request ID
+		ctx := context.WithValue(r.Context(), RequestIDKey, requestID)
+
+		// Update the logger with request ID
 		log = log.With(
 			slog.String("request_id", requestID),
 			slog.String("url", r.URL.String()),
@@ -32,8 +43,11 @@ func LoggerMiddleware(log *slog.Logger, next http.Handler) http.Handler {
 			slog.String("remote_address", r.RemoteAddr),
 			slog.String("user_agent", r.UserAgent()),
 		)
-		next.ServeHTTP(w, r)
 
+		// Use the updated context
+		next.ServeHTTP(w, r.WithContext(ctx))
+
+		// Log the request
 		log.Info("HTTP request served",
 			slog.String("duration", time.Since(start).String()),
 		)
