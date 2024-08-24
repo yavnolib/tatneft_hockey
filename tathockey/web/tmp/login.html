@@ -11,12 +11,24 @@
 </head>
 <body>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg  mynavbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/feeds">
-            <span class="profound">Profound</span><span class="pick">Pick</span>
-        </a>
+        <a class="navbar-brand" href="/feeds"> <span class="profound">Profound</span><span class="pick">Pick</span></a>
+
+        <div class="d-flex justify-content-between gap-3">
+            <div class="d-flex flex-column justify-content-between">
+                <div>
+                    <a class="fw-bold" href="/login" style="text-decoration: none; color: black; border-color: black;">Войти</a>
+                </div>
+                <div>
+                    <a class="fw-bold" href="/signup" style="text-decoration: none; color: black; border-color: black;">Зарегистрироваться</a>
+                </div>
+            </div>
+        </div>
+
+
     </div>
+
 </nav>
 <a href="https://tatneft.ru" class="d-flex justify-content-center">
     <svg xmlns="http://www.w3.org/2000/svg"
@@ -81,6 +93,7 @@
                         <div class="invalid-feedback" id="passwordError"></div>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Login</button>
+
                 </form>
             </div>
         </div>
