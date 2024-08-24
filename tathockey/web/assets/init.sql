@@ -25,5 +25,12 @@ create table if not exists video
     hash        varchar(256) unique not null,
     created_at  TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP,
     description text
+);
+
+create table if not exists results
+(
+    id serial primary key,
+    post int references video(id),
+    param1 text
 )
 

@@ -1,35 +1,27 @@
-# Используем официальный образ Go для сборки
-FROM golang:1.22.6-alpine AS builder
+FROM golang:1.22.6-alpine AS build
 
-# Устанавливаем необходимые зависимости
-RUN apk add --no-cache git
-
-# Устанавливаем рабочую директорию внутри контейнера
-WORKDIR /app
+WORKDIR /var/backend
 
 # Копируем go.mod и go.sum для установки зависимостей
-COPY go.mod go.sum ./
+COPY cmd cmd
+COPY internal internal
+COPY tmp tmp
+COPY .env .env
 
-# Устанавливаем зависимости
-RUN go mod download
+COPY go.mod go.mod
+COPY go.sum go.sum
 
-# Копируем остальные файлы проекта
-COPY back .
+RUN go mod tidy
+RUN go build -o main ./cmd/test/main.go
 
-# Сборка бинарного файла
-RUN go build -o /auth_service cmd/main.go
+FROM alpine:edge as prod
+RUN apk add bash
+COPY --from=build /var/backend/main /app/main
+COPY --from=build /var/backend/.env /app/.env
 
-# Используем минимальный образ для запуска
-FROM alpine:latest
+COPY tmp /app/tmp
+COPY static /app/static
 
-# Копируем бинарный файл из этапа сборки
-COPY --from=builder /auth_service /auth_service
-
-# Устанавливаем рабочую директорию
-WORKDIR /
-
-# Указываем порт, на котором работает сервис
-EXPOSE 8000
-
-# Команда запуска контейнера
-CMD ["/auth_service"]
+WORKDIR /app
+EXPOSE 8080
+ENTRYPOINT ./main
