@@ -54,6 +54,7 @@ func (u *UserManager) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if req.Email == "" || req.Password == "" {
+
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
