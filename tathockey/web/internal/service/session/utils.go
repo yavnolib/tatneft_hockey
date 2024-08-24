@@ -24,6 +24,7 @@ func RandStringRunes(n int) string {
 
 func FromContext(ctx context.Context) (*models.Session, error) {
 	sess, ok := ctx.Value(Key).(*models.Session)
+
 	if !ok {
 		return nil, ErrNoAuth
 	}
