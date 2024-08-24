@@ -1,11 +1,12 @@
-package handlers
+package http
 
 import (
 	"errors"
 	"log/slog"
 	"net/http"
 	"tat_hockey_pack/internal/interfaces"
-	"tat_hockey_pack/internal/middleware"
+	"tat_hockey_pack/internal/utils"
+
 	"tat_hockey_pack/internal/models"
 	"time"
 )
@@ -20,7 +21,6 @@ const CookieName = "session_id"
 var ErrNoAuth = errors.New("No session found")
 
 func NewSessionManager(sessions interfaces.SessionService, log *slog.Logger) *SessionManager {
-
 	return &SessionManager{
 		sessions: sessions,
 		log:      log,
@@ -39,7 +39,7 @@ func (s *SessionManager) Index(w http.ResponseWriter, r *http.Request) {
 
 func (s *SessionManager) Check(r *http.Request) (*models.Session, error) {
 	const op = "SessionManager.Check"
-	request_id := middleware.RequestIDFromContext(r.Context())
+	request_id := utils.RequestIDFromContext(r.Context())
 
 	s.log = s.log.With(
 		slog.String("method", r.Method),
