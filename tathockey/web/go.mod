@@ -1,6 +1,6 @@
 module tat_hockey_pack
 
-go 1.22.4
+go 1.23
 
 require (
 	github.com/caarlos0/env v3.5.0+incompatible

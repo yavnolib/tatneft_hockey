@@ -12,25 +12,33 @@ CREATE INDEX idx_sessions_session_id ON sessions (id);
 create table if not exists users
 (
     id       serial primary key,
-    email varchar(129) unique,
+    email    varchar(129) unique,
     nickname varchar(128) unique,
     password bytea NOT NULL
 );
 
-create table if not exists video
+CREATE TABLE videos
 (
-    id          serial primary key,
-    creator_id int not null references users(id),
-    name        text,
-    hash        varchar(256) unique not null,
-    created_at  TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    description text
+    id   serial primary key ,
+    name TEXT NOT NULL
 );
 
-create table if not exists results
+CREATE TABLE posts
 (
-    id serial primary key,
-    post int references video(id),
-    param1 text
-)
+    id          serial primary key ,
+    title      TEXT        NOT NULL,
+    preview    TEXT        NOT NULL,
+    video_id   INTEGER REFERENCES videos (id),
+    creator_id INTEGER REFERENCES users(id),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE gifs
+(
+    id         serial primary key,
+    path       TEXT    NOT NULL,
+    video_id   TEXT    NOT NULL,
+    class_name INTEGER NOT NULL,
+    post_id    INTEGER REFERENCES posts (id)
+);
 
