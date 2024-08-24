@@ -7,6 +7,7 @@ import (
 	"tat_hockey_pack/internal/models"
 	"tat_hockey_pack/internal/repository"
 	"tat_hockey_pack/internal/repository/repo_errors"
+	"time"
 )
 
 // TODO можно реализовать замену пароля
@@ -64,6 +65,7 @@ func (s *Service) Register(email, nickname, password string) (int64, error) {
 }
 
 func (s *Service) Login(email, password string) (int64, error) {
+	s.log.Debug("UserService.Login", "start", time.Now())
 	user, err := s.repo.CheckPass(email)
 	if err != nil {
 		return -1, err

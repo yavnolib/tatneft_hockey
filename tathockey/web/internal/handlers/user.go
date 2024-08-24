@@ -9,6 +9,7 @@ import (
 	"tat_hockey_pack/internal/interfaces"
 	"tat_hockey_pack/internal/models"
 	"tat_hockey_pack/internal/repository/repo_errors"
+	"time"
 )
 
 type UserManager struct {
@@ -40,31 +41,23 @@ type LoginResponse struct {
 }
 
 func (u *UserManager) Login(w http.ResponseWriter, r *http.Request) {
-	u.log.Info("method", "Login")
-	u.log.Debug(
-		"method", "Login",
-	)
+	u.log.Debug("UserManager.Login", "start", time.Now())
 	if r.Method != "POST" {
 		return
 	}
 
 	var req LoginRequest
-
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		u.log.Error("Login Error", "err", err.Error(),
-			"body", r.Body,
-			"req", req)
+		u.log.Error("Login Error", "err", err.Error(), "req", req)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	u.log.Error("Login Error",
-		"body", r.Body,
-		"req", req)
+
 	if req.Email == "" || req.Password == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	u.log.Debug("Login", "request", req)
+
 	user, err := u.users.Login(req.Email, req.Password)
 	if errors.Is(err, repo_errors.ErrUserNotExists) {
 		responseJSON(w, LoginResponse{
@@ -72,7 +65,9 @@ func (u *UserManager) Login(w http.ResponseWriter, r *http.Request) {
 			Token:   "",
 			Message: "User does not exist",
 		})
+		return
 	}
+
 	if err != nil {
 		u.log.Error("Login Handler Error", "err", err.Error())
 		responseJSON(w, LoginResponse{
@@ -89,18 +84,11 @@ func (u *UserManager) Login(w http.ResponseWriter, r *http.Request) {
 		u.log.Error("Login Handler Error -- Sessions", "err", err.Error())
 		return
 	}
-	u.log.Info("Login Success", "user", user)
-	//responseJSON(w, LoginResponse{
-	//	Status:  http.StatusOK,
-	//	Token:   uuid.New().String(),
-	//	Message: "Login succeeded",
-	//})
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 
-	json.NewEncoder(w).Encode(LoginResponse{
+	u.log.Info("Login Success", "user", user)
+	responseJSON(w, LoginResponse{
 		Status:  http.StatusOK,
-		Token:   uuid.New().String(),
+		Token:   "session_token_here",
 		Message: "Login succeeded",
 	})
 }
@@ -120,11 +108,12 @@ func responseJSON(w http.ResponseWriter, body interface{}) {
 }
 
 func (u *UserManager) Logout(w http.ResponseWriter, r *http.Request) {
-	u.log.Debug(
-		"method", "Logout")
-	if r.Method != "POST" {
+	err := u.sessions.DestroyCurrent(w, r)
+	if err != nil {
+		u.log.Error("Logout Handler Error -- Sessions", "err", err.Error())
 		return
 	}
+	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 
 }
 
@@ -149,7 +138,7 @@ func (u *UserManager) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	u.log.Debug("Register", "request", req)
-	_, err := u.users.Register(req.Email, req.Nickname, req.Password)
+	user, err := u.users.Register(req.Email, req.Nickname, req.Password)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		responseJSON(w, LoginResponse{
@@ -158,6 +147,7 @@ func (u *UserManager) Register(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+	err = u.sessions.Create(w, r, &models.User{ID: user})
 	w.WriteHeader(http.StatusOK)
 	responseJSON(w, LoginResponse{
 		Status:  http.StatusOK,
