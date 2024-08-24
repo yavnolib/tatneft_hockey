@@ -5,33 +5,60 @@ import (
 	"log/slog"
 	"net/http"
 	"strings"
+	"tat_hockey_pack/internal/handlers"
 	"tat_hockey_pack/internal/interfaces"
 	"tat_hockey_pack/internal/service/session"
 )
 
 var NoAuth = map[string]struct{}{
-	"/login":  {},
-	"/signup": {},
-	"/feeds":  {},
-	"/post":   {},
-	"/":       {},
+	"/login":         {},
+	"/api/v1/logout": {},
+	"/api/v1/login":  {},
+	"/api/v1/signup": {},
+	"/signup":        {},
+	"/feeds":         {},
+	"/post":          {},
+	"/":              {},
 }
+
+type contextKey string
+
+const CookieKey contextKey = "user-cookie"
 
 func Auth(sm interfaces.SessionManager, log *slog.Logger, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, ok := NoAuth[r.URL.Path]
-		log.Info("AuthMiddleware", "auth route", ok)
-		if ok || strings.Contains(r.URL.Path, "static") {
+		// Проверка на необходимость аутентификации
+		if _, ok := NoAuth[r.URL.Path]; ok || strings.Contains(r.URL.Path, "static") {
+			log.Info("AuthMiddleware", "auth route", true)
 			next.ServeHTTP(w, r)
 			return
 		}
 
+		// Получаем куку
+		cookie, err := r.Cookie(handlers.CookieName)
+		if err != nil {
+			log.Error("AuthMiddleware", "cookie error", err.Error())
+			http.Redirect(w, r, "/login", http.StatusUnauthorized)
+			return
+		}
+
+		// Проверка сессии
 		sess, err := sm.Check(r)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusUnauthorized)
+			log.Error("AuthMiddleware",
+				"session check error", err.Error(),
+				"func", "sm.Check")
+			http.Redirect(w, r, "/login", http.StatusUnauthorized)
+			return
 		}
-		ctx := context.WithValue(r.Context(), session.Key, sess)
 
-		next.ServeHTTP(w, r.WithContext(ctx))
+		// Сохраняем сессию и куки в контексте
+		ctx := context.WithValue(r.Context(), session.Key, sess)
+		ctx = context.WithValue(ctx, CookieKey, cookie)
+		r = r.WithContext(ctx)
+
+		log.Debug("AuthMiddleware", "cookie", cookie.Value)
+
+		next.ServeHTTP(w, r)
 	})
 }
