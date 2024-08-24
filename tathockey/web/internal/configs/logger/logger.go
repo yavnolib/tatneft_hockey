@@ -172,7 +172,7 @@ func InitLogger() *slog.Logger {
 			Compress:   true, // Сжимать старые файлы
 		}
 		handler = slog.NewJSONHandler(logFile, &slog.HandlerOptions{
-			Level: slog.LevelInfo,
+			Level: slog.LevelDebug,
 		})
 		logger = slog.New(handler)
 	case "dev":

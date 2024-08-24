@@ -5,35 +5,24 @@ import (
 	"github.com/google/uuid"
 	"log/slog"
 	"net/http"
+	"tat_hockey_pack/internal/utils"
 	"time"
 )
 
 type ContextKey string
 
-const (
-	RequestIDKey contextKey = "requestID"
-)
-
-func RequestIDFromContext(ctx context.Context) string {
-	requestID, ok := ctx.Value(RequestIDKey).(string)
-	if !ok {
-		return "-"
-	}
-	return requestID
-}
-
 func LoggerMiddleware(log *slog.Logger, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
-
 		// Generate new request ID if not present
-		requestID := RequestIDFromContext(r.Context())
-		if requestID == "" {
+		requestID := utils.RequestIDFromContext(r.Context())
+		if requestID == "-" {
 			requestID = uuid.New().String()
 		}
+		ctx := context.WithValue(r.Context(), utils.RequestIDKey, requestID)
 
+		r = r.WithContext(ctx)
 		// Create new context with request ID
-		ctx := context.WithValue(r.Context(), RequestIDKey, requestID)
 
 		// Update the logger with request ID
 		log = log.With(
