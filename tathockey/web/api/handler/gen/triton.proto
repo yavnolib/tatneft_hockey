@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package tat_ProfoundPick;
+
+option go_package = "/api/gen;tat_ProfoundPick";
+
+service TritonPick {
+  rpc ProcessVideo (VideoRequest) returns (VideoResponse);
+}
+
+message VideoRequest {
+  string video_name = 1;
+}
+
+message VideoResponse {
+  repeated uint64 seconds = 1;
+  repeated int32 event_type= 2;
+}
