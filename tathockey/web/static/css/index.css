@@ -46,7 +46,7 @@ body {
     min-height: 100vh;
 }
 
-.navbar {
+.mynavbar {
     background-color: rgba(133, 195, 143, 0.66); /* Зелёный цвет для Navbar */
 }
 
