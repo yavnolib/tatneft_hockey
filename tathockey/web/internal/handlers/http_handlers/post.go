@@ -249,7 +249,7 @@ var examplePost = models.Post{
 var tmpl = template.Must(template.ParseFiles("/app/tmp/post.html"))
 
 // PostHandler handles the "/post" route
-func PostHandler(w http.ResponseWriter, r *http.Request) {
+func (p *PostManager) PostHandler(w http.ResponseWriter, r *http.Request) {
 	// Extract post ID from query params
 	idStr := r.URL.Query().Get("id")
 	postID, err := strconv.Atoi(idStr)
@@ -259,7 +259,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Dummy post data, normally fetched from a database
-	post := examplePost
+	post, _ := p.postRepo.GetPostByID(postID)
 
 	// Execute the template
 	err = tmpl.Execute(w, post)
