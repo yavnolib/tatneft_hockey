@@ -38,7 +38,7 @@ func (p *Post) GetAllPosts() ([]models.PostPreview, error) {
 	return posts, nil
 }
 
-func (p *Post) GetPostByID(id int64) (models.Post, error) {
+func (p *Post) GetPostByID(id int) (models.Post, error) {
 	var post models.Post
 
 	row := p.db.QueryRow(context.Background(), `
@@ -49,6 +49,25 @@ func (p *Post) GetPostByID(id int64) (models.Post, error) {
 	err := row.Scan(&post.ID, &post.Title, &post.Preview, &post.VideoID, &post.CreatorID, &post.CreatedAt)
 	if err != nil {
 		return post, err
+	}
+
+	gifRows, err := p.db.Query(context.Background(), `SELECT path, class_name FROM gifs WHERE post_id = $1`, id)
+	if err != nil {
+		return post, err
+	}
+	defer gifRows.Close()
+
+	for gifRows.Next() {
+		var gifPath string
+		var className string
+		err := gifRows.Scan(&gifPath, &className)
+		if err != nil {
+			return post, err
+		}
+		post.GIFs = append(post.GIFs, models.Gif{
+			Name:       gifPath,
+			EventClass: className,
+		}) // Append file path
 	}
 
 	return post, nil
