@@ -5,9 +5,9 @@ import (
 	"log/slog"
 	"net/http"
 	"strings"
-	http2 "tat_hockey_pack/internal/handlers/http"
+	http2 "tat_hockey_pack/internal/handlers/http_handlers"
 	"tat_hockey_pack/internal/interfaces"
-	"tat_hockey_pack/internal/service/session"
+	"tat_hockey_pack/internal/utils/ses"
 )
 
 var NoAuth = map[string]struct{}{
@@ -58,7 +58,7 @@ func Auth(sm interfaces.SessionManager, log *slog.Logger, next http.Handler) htt
 		}
 
 		// Сохраняем сессию и куки в контексте
-		ctx := context.WithValue(r.Context(), session.Key, sess)
+		ctx := context.WithValue(r.Context(), ses.Key, sess)
 		ctx = context.WithValue(ctx, CookieKey, cookie)
 		r = r.WithContext(ctx)
 

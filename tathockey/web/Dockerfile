@@ -7,6 +7,7 @@ COPY cmd cmd
 COPY internal internal
 COPY tmp tmp
 COPY .env .env
+COPY api api
 
 COPY go.mod go.mod
 COPY go.sum go.sum
@@ -21,6 +22,7 @@ COPY --from=build /var/backend/.env /app/.env
 
 COPY tmp /app/tmp
 COPY static /app/static
+COPY gifs /app/gifs
 
 WORKDIR /app
 EXPOSE 8080

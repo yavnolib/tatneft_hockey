@@ -7,6 +7,7 @@ import (
 	"tat_hockey_pack/internal/interfaces"
 	"tat_hockey_pack/internal/models"
 	"tat_hockey_pack/internal/repository"
+	"tat_hockey_pack/internal/utils/ses"
 	"time"
 )
 
@@ -50,7 +51,7 @@ func (s *Service) Check(ctx context.Context, sessionFromCookie string) (*models.
 func (s *Service) Create(ctx context.Context, u interfaces.User) (string, error) {
 	s.log.Debug("SessionService.Create", "start", time.Now())
 	session := models.Session{
-		ID:     RandStringRunes(16),
+		ID:     ses.RandStringRunes(16),
 		UserID: u.GetID(),
 	}
 
@@ -63,7 +64,7 @@ func (s *Service) Create(ctx context.Context, u interfaces.User) (string, error)
 
 // DestroyCurrent для logout
 func (s *Service) DestroyCurrent(ctx context.Context) error {
-	session, err := FromContext(ctx)
+	session, err := ses.FromContext(ctx)
 	if err != nil {
 		s.log.Error("service.session.DestroyCurrent",
 			"func", "FromContext",

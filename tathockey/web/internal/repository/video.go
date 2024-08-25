@@ -27,9 +27,9 @@ func NewVideoRepository(db *pgxpool.Pool, logger *slog.Logger) *Video {
 	}
 }
 
-func (v *Video) Save(vi *models.Video) (uint64, error) {
+func (v *Video) Save(vi *models.Video) (int64, error) {
 	v.log.Debug("Video.Save", "--", "run")
-	var id uint64
+	var id int64
 	err := v.db.QueryRow(context.Background(), saveVideo,
 		vi.Name).
 		Scan(&id)

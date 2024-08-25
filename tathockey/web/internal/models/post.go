@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"net/http"
+	"time"
+)
 
 const PreviewUpload = "./preview"
 
@@ -19,4 +22,13 @@ type PostPreview struct {
 	Preview   string    `json:"preview"`
 	CreatorID int64     `json:"creator_id"`
 	CreatedAt time.Time `json:"created_at"`
+}
+
+type PostResponse struct {
+	ID        int64       `json:"id"`
+	Title     string      `json:"title"`
+	GIFs      []http.File `json:"gifs"`  // List of file paths
+	Names     []string    `json:"names"` // List of file names
+	CreatedAt time.Time   `json:"created_at"`
+	CreatorID int64       `json:"creator_id"`
 }

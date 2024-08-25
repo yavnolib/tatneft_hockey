@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"tat_hockey_pack/internal/models"
 	"tat_hockey_pack/internal/repository/repo_errors"
+	"tat_hockey_pack/internal/utils/ses"
 	"time"
 )
 
@@ -30,12 +31,24 @@ const (
 	destroyBySessionID = `delete from sessions where id = $1`
 	destroyAll         = `delete from sessions where user_id = $1`
 	getBySessionID     = `select id, user_id, created_at from sessions where id = $1`
+
+	getUserIDbySessionID = `select user_id from sessions where id = $1`
 )
 
+func (s *Session) GetUserIDbySessionID(ctx context.Context) (int64, error) {
+	var id int64
+	sess, _ := ses.FromContext(ctx)
+	err := s.db.QueryRow(ctx, getUserIDbySessionID, sess.ID).Scan(&id)
+	if err != nil {
+		return -1, err
+	}
+	return id, nil
+}
+
 func (s *Session) GetBySessionID(ctx context.Context, id string) (*models.Session, error) {
-	var session models.Session
+	var sess models.Session
 	err := s.db.QueryRow(ctx, getBySessionID, id).
-		Scan(&session.ID, &session.UserID, &session.CreatedAt)
+		Scan(&sess.ID, &sess.UserID, &sess.CreatedAt)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, repo_errors.ErrNoSession
@@ -43,7 +56,7 @@ func (s *Session) GetBySessionID(ctx context.Context, id string) (*models.Sessio
 
 		return nil, err
 	}
-	return &session, nil
+	return &sess, nil
 }
 
 func (s *Session) Create(ctx context.Context, session *models.Session) error {

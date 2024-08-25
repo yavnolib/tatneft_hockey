@@ -21,9 +21,6 @@
                 <a class="fw-bold" href="/new_post" style="color: black; text-decoration: none">Загрузка</a>
             </div>
             <div class="d-flex flex-column justify-content-between">
-                <div class="white">
-                    <a>{{.Nickname}}</a>
-                </div>
                 <div>
                     <a class="fw-bold" href="/api/v1/logout" style="text-decoration: none; color: black; border-color: black;">Log out</a>
                 </div>
@@ -82,23 +79,18 @@
         <div class="col-md-6">
             <div class="form-container">
                 <h3 class="text-center mb-4">Upload News</h3>
-                <form>
+                <form action="/upload" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="title" placeholder="Enter news title" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" rows="4" placeholder="Enter news description"
-                                  required></textarea>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter news title" required>
                     </div>
                     <div class="mb-3">
                         <label for="photo" class="form-label">Photo (optional)</label>
-                        <input type="file" class="form-control" id="photo" accept="image/*">
+                        <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
                     </div>
                     <div class="mb-3">
                         <label for="video" class="form-label">Video</label>
-                        <input type="file" class="form-control" id="video" accept="video/*" required>
+                        <input type="file" class="form-control" id="video" name="video" accept="video/*" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Upload</button>
                 </form>
