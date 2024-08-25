@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  pgdb:
+    image: postgres:16.4
+    ports:
+      - "54320:5432"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - pg_data:/var/lib/postgresql/data/
+    restart: unless-stopped
+    networks:
+      - app-network
+#  nginx:
+#    build:
+#      context: ./front
+#    container_name: nginx
+#    ports:
+#      - "80:80"
+#    volumes:
+#      - ./upload:/upload/
+#    networks:
+#      - app-network
+  go-back:
+    build: .
+    ports:
+      - "8080:8080"
+#    depends_on:
+#      - postgres
+    networks:
+      - app-network
+    volumes:
+      - ./uploads:/app/uploads
+
+
+
+
+volumes:
+  pg_data:
+#  nginx_data:
+
+networks:
+  app-network:
+    driver: bridge

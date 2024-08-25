@@ -1,0 +1,117 @@
+.news-card {
+    background-color: #ffffff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.news-card img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+.news-date {
+    color: #999;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.news-detail {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.news-detail img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.news-date {
+    color: #999;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+}
+
+body {
+    background-color: #f2f2f2; /* Серый фон */
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.mynavbar {
+    background-color: rgba(133, 195, 143, 0.66); /* Зелёный цвет для Navbar */
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: white;
+}
+
+.form-container {
+    background-color: #ffffff; /* Белый цвет для формы */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1); /* Эффект объема */
+    border: 1px solid #e0e0e0; /* Тонкая граница */
+    margin-bottom: auto;
+}
+
+.form-control:focus {
+    border-color: #007a33;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: #007a33;
+    border: none;
+    box-shadow: 0px 4px 10px rgba(0, 122, 51, 0.3); /* Эффект объема на кнопке */
+}
+
+.btn-primary:hover {
+    background-color: #005a29;
+}
+
+.toggle-password {
+    cursor: pointer;
+    color: #007a33;
+}
+
+.toggle-password:hover {
+    color: #005a29;
+}
+
+.invalid-feedback {
+    display: block;
+    font-size: 0.875em;
+    margin-top: 5px;
+}
+body {
+    background-image: url('../img/background.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.profound, .pick {
+    /*font-family: 'Arial Black', Gadget, sans-serif;*/
+    font-weight: 900;
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.profound {
+    color: green;
+}
+
+.pick {
+    color: red;
+}
+

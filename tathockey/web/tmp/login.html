@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MYTEAM</title>
+    <!-- Bootstrap CSS -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../static/css/index.css" rel="stylesheet">
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg  mynavbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/feeds"> <span class="profound">Profound</span><span class="pick">Pick</span></a>
+
+        <div class="d-flex justify-content-between gap-3">
+            <div class="d-flex flex-column justify-content-between">
+                <div>
+                    <a class="fw-bold" href="/login" style="text-decoration: none; color: black; border-color: black;">Войти</a>
+                </div>
+                <div>
+                    <a class="fw-bold" href="/signup" style="text-decoration: none; color: black; border-color: black;">Зарегистрироваться</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</nav>
+<a href="https://tatneft.ru" class="d-flex justify-content-center">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         version="1.1"
+         width="400"
+         height="125"
+         id="svg2816"
+         xml:space="preserve">
+        <defs id="defs2820">
+            <clipPath id="clipPath2866">
+                <path d="m 220.507,683.981 -169.412,0 0,-46.573 169.412,0 0,46.573 z" id="path2868"/>
+            </clipPath>
+        </defs>
+        <g transform="matrix(1.25,0,0,-1.25,0,124.99995)" id="g2826">
+            <g transform="matrix(1.794442,0,0,1.794442,-83.687018,-1135.578)" id="g2918">
+                <g id="g2862">
+                    <g clip-path="url(#clipPath2866)" id="g2864">
+                        <path d="m 70.171,674.268 c 2.993,-7.595 -1.887,-12.47 -6.748,-17.353 -4.524,-4.989 -8.509,-10.175 -0.494,-19.508 -2.994,7.594 1.887,12.47 6.744,17.348 4.528,5 8.513,10.179 0.498,19.513"
+                              id="path2870" style="fill:#ef3d42;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+                        <path d="m 62.929,683.981 c 2.998,-7.598 -1.88,-12.47 -6.745,-17.35 -4.523,-4.993 -8.507,-10.179 -0.489,-19.512 -2.996,7.6 1.884,12.471 6.744,17.351 4.526,4.994 8.506,10.178 0.49,19.511"
+                              id="path2872" style="fill:#00b274;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+                    </g>
+                </g>
+                <path d="m 185.928,653.902 0,-15.524 6.799,0 0,5.683 7.471,0 0,3.398 -7.471,0 0,3.045 14.82,0 0,-12.126 6.8,0 0,12.126 6.16,0 0,3.398 -34.579,0"
+                      id="path2874" style="fill:#00b274;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+                <path
+                        d="m 171.34,641.747 0,2.691 8.866,0 0,3.401 -8.866,0 0,2.665 11.388,0 0,3.398 -18.187,0 0,-15.524 18.327,0 0,3.369 -11.528,0"
+                        id="path2876" style="fill:#00b274;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+                <path d="m 99.629,653.902 -18.841,0 0,-3.398 6.021,0 0,-12.126 6.799,0 0,12.126 6.021,0 0,3.398"
+                      id="path2878"
+                      style="fill:#ef3d42;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+                <path
+                        d="m 104.777,644.26 3.146,6.009 3.011,-6.009 -6.157,0 z m 8.276,9.642 -7.288,0 -8.486,-15.524 4.419,0 1.395,2.665 9.529,0 1.391,-2.665 7.53,0 -8.49,15.524"
+                        id="path2880" style="fill:#ef3d42;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+                <path d="m 156.198,653.902 0,-7.761 -10.874,7.761 -5.277,0 0,-15.524 4.654,0 0,8.541 11.166,-8.541 4.984,0 0,15.524 -4.653,0"
+                      id="path2882"
+                      style="fill:#00b274;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+                <path d="m 137.737,653.902 -18.446,0 0,-3.398 6.02,0 0,-12.126 6.8,0 0,12.126 5.626,0 0,3.398"
+                      id="path2884" style="fill:#ef3d42;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+            </g>
+        </g>
+</svg>
+</a>
+<!-- Login Form -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="form-container">
+                <h3 class="text-center mb-4">Login</h3>
+                <form id="loginForm" novalidate>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+                        <div class="invalid-feedback" id="emailError"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+                            <span class="input-group-text toggle-password"><i class="bi bi-eye"></i></span>
+                        </div>
+                        <div class="invalid-feedback" id="passwordError"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+<!-- Icon library -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<script>
+    // Show/hide password functionality
+    document.querySelector('.toggle-password').addEventListener('click', function () {
+        const passwordField = document.getElementById('password');
+        const passwordFieldType = passwordField.getAttribute('type');
+        if (passwordFieldType === 'password') {
+            passwordField.setAttribute('type', 'text');
+            this.innerHTML = '<i class="bi bi-eye-slash"></i>';
+        } else {
+            passwordField.setAttribute('type', 'password');
+            this.innerHTML = '<i class="bi bi-eye"></i>';
+        }
+    });
+
+    // Form validation
+    document.getElementById('loginForm').addEventListener('submit', function (event) {
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+        let valid = true;
+
+        // Clear previous errors
+        emailError.textContent = '';
+        passwordError.textContent = '';
+
+        // Email validation
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(email.value)) {
+            valid = false;
+            emailError.textContent = 'Invalid email address.';
+            email.classList.add('is-invalid');
+        } else {
+            email.classList.remove('is-invalid');
+        }
+
+        // Password validation
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%*?&#])[A-Za-z\d@$%*?&#]{9,}$/;
+        if (!passwordRegex.test(password.value)) {
+            valid = false;
+            if (password.value.length < 9) {
+                passwordError.textContent = 'Password must be at least 9 characters long.';
+            } else {
+                passwordError.textContent = 'Password must include uppercase, lowercase, number, and special character.';
+            }
+            password.classList.add('is-invalid');
+        } else {
+            password.classList.remove('is-invalid');
+        }
+
+        if (!valid) {
+            event.preventDefault();
+            event.stopPropagation();
+            return
+        }
+
+        this.classList.add('was-validated');
+        // AJAX request
+        event.preventDefault();
+
+        fetch('/api/v1/login', {
+            method: 'POST',
+            body: JSON.stringify({ email: email.value, password: password.value }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+            .then(response => response.json()) // Ensure to call response.json() here
+            .then(data => {
+                if (data.token) {
+                    // Redirect to /feeds on successful login
+                    window.location.href = '/feeds';
+                } else {
+                    console.error('No token received');
+                    alert('Invalid credentials.');
+                }
+            })
+            .catch(error => {
+                console.error('Error during login:', error);
+            });
+    });
+
+</script>
+</body>
+</html>
